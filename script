@@ -1,0 +1,105 @@
+<script>
+
+  window.pipedriveLeadboosterConfig = {
+
+    base: 'leadbooster-chat.pipedrive.com',
+
+    companyId: XXXXXXX,
+
+    playbookUuid: 'xxxxxxx-xxxxxxx-xxxxxxxxx-xxxxxxx',
+
+    version: 2
+
+  };
+
+  (function() {
+
+    var w = window;
+
+    if (w.LeadBooster) {
+
+      console.warn('LeadBooster already exists');
+
+    } else {
+
+      w.LeadBooster = {
+
+        q: [], 
+
+        on: function(n, h) {
+
+          this.q.push({ t: 'o', n: n, h: h });
+
+        },
+
+        trigger: function(n) {
+
+          this.q.push({ t: 't', n: n });
+
+        }
+
+      };
+
+      w.LeadBooster.on('conversationEnded', function(data) {
+
+        var eventLabel = data.qualified ? 'chat-lead' : 'conversation-ended';
+
+        dataLayer.push({
+
+          'event': 'leadboosterEvent',
+
+          'eventCategory': 'LeadBooster Chat',
+
+          'eventAction': 'Conversation Ended',
+
+          'eventLabel': eventLabel,
+
+          'eventValue': null
+
+        });
+
+      });
+
+      w.LeadBooster.on('opened', function(data) {
+
+        dataLayer.push({
+
+          'event': 'leadboosterEvent',
+
+          'eventCategory': 'LeadBooster Chat',
+
+          'eventAction': 'Opened',
+
+          'eventLabel': 'chat-opened',
+
+          'eventValue': null
+
+        });
+
+      });
+
+      w.LeadBooster.on('closed', function(data) {
+
+        dataLayer.push({
+
+          'event': 'leadboosterEvent',
+
+          'eventCategory': 'LeadBooster Chat',
+
+          'eventAction': 'Closed',
+
+          'eventLabel': 'chat-closed',
+
+          'eventValue': null
+
+        });
+
+      });
+
+    }
+
+  })();
+
+</script>
+
+<script src="https://leadbooster-chat.pipedrive.com/assets/loader.js" async></script>
